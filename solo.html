@@ -1,0 +1,70 @@
+<html>
+<head>
+	<title>solar system</title>
+	<style>canvas { width: 100%; height: 100% }</style>
+</head>
+<body>
+	
+	<script src="three.min.js"></script>
+	<script>
+
+	var solor_system = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 20000);
+	var renderer = new THREE.WebGLRenderer();
+
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	document.body.appendChild(renderer.domElement);
+
+	const loadimage = new THREE.TextureLoader();
+	const background_Texture = loadimage.load('galaxy.jpg');
+    solor_system.background = background_Texture;
+
+	var sun_geometry= new THREE.SphereGeometry(450,150,150);
+	var sun_material = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('sun.jpg'), wireframe:false, side:THREE.DoubleSide});
+	var sun_mesh =new THREE.Mesh(sun_geometry,sun_material);
+	solor_system.add(sun_mesh);
+
+	var earth_geometry= new THREE.SphereGeometry(100,80,80);
+	var earth_material = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('earth.jpg'), wireframe:false, side:THREE.DoubleSide});
+	var earth_mesh =new THREE.Mesh(earth_geometry,earth_material);
+	earth_mesh.position.set(-1500,0,0);
+	sun_mesh.add(earth_mesh);
+
+	var moon_geometry= new THREE.SphereGeometry(50,10,10);
+	var moon_material = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load('moon.png'), wireframe:false, side:THREE.DoubleSide});
+	var moon_mesh =new THREE.Mesh(moon_geometry,moon_material);
+	moon_mesh.position.set(-250,0,0);
+	earth_mesh.add(moon_mesh);
+
+    var Tr_geometry= new THREE.TorusGeometry(1500,2,2,100);
+	var Tr_material = new THREE.MeshBasicMaterial({color:0xffff00});
+	var Tr_mesh =new THREE.Mesh(Tr_geometry,Tr_material);
+	Tr_mesh.position.set(0,0,0);
+	solor_system.add(Tr_mesh);
+    Tr_mesh.rotateX(1.6);
+
+
+	camera.position.z=3000;
+    camera.position.y=200
+
+
+	function render() {
+	requestAnimationFrame(render);
+	earth_mesh.rotation.y += 0.02;
+	sun_mesh.rotation.y += 0.001;
+	renderer.render(solor_system, camera);
+	};
+	window.addEventListener('resize',function()
+	{
+		var width = window.innerWidth;
+		var height=window.innerHeight;
+		renderer.setSize(width,height);
+		camera.aspect=width/height;
+		camera.updateProjectionMatrix();
+	})
+	
+	render();
+
+	</script>
+</body>
+</html>
